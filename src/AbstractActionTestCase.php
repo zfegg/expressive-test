@@ -147,6 +147,7 @@ abstract class AbstractActionTestCase extends TestCase
             } elseif (! is_null($body)) {
                 throw new \RuntimeException('Invalid body type');
             }
+            $stream->rewind();
         }
 
         $request = new ServerRequest(

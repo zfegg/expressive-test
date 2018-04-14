@@ -29,10 +29,9 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
 
     public function postHandler(ServerRequestInterface $request)
     {
-        $raw = (string)$request->getBody();
         $servers = $request->getServerParams();
         $this->assertEquals('POST', $request->getMethod());
-        $this->assertEquals('{"a":"b"}', $raw);
+        $this->assertEquals('{"a":"b"}', $request->getBody()->getContents());
         $this->assertArraySubset(['test' => '1'], $request->getQueryParams());
         $this->assertArraySubset(['HTTP_CONTENT_TYPE' => 'application/json'], $servers);
         $this->assertArraySubset(['body' => '2'], $request->getParsedBody());
