@@ -4,7 +4,6 @@ use Zend\ConfigAggregator\ConfigAggregator;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
-
 $aggregator = new ConfigAggregator([
     \Zend\Expressive\Router\FastRouteRouter\ConfigProvider::class,
     \Zend\Expressive\ConfigProvider::class,

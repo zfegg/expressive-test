@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Zfegg\ExpressiveTest;
 
 use Psr\Http\Message\ResponseInterface;
@@ -13,6 +15,7 @@ class PassMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
+
         return $handler->handle($request);
     }
 }
