@@ -6,12 +6,31 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response;
+use Zend\Diactoros\Stream;
 use Zend\Expressive\Application;
 use Zfegg\ExpressiveTest\AbstractActionTestCase;
 
 class AbstractActionTestCaseTest extends AbstractActionTestCase
 {
-    public function testAction()
+    public function params()
+    {
+
+        $body = '{"a":"b"}';
+        $stream = new Stream('php://memory', 'r+');
+        $stream->write($body);
+        $stream->rewind();
+
+        return [
+            'BodyString' => [$body],
+            'BodyStreamInterface' => [$stream],
+        ];
+    }
+
+    /**
+     *
+     * @dataProvider params
+     */
+    public function testAction($body)
     {
         $app = $this->container->get(Application::class);
         $app->post('/', [$this, 'postHandler']);
@@ -20,7 +39,7 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
             '/?test=1',
             ['body' => '2'],
             ['HTTP_CONTENT_TYPE' => 'application/json'],
-            '{"a":"b"}',
+            $body,
             ['cookie' => '3']
         );
 
