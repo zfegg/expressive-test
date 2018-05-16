@@ -52,6 +52,7 @@ abstract class AbstractActionTestCase extends TestCase
      */
     public function setUp()
     {
+        chdir($this->getProjectDir());
         $this->container = $this->loadContainer();
         $this->container->setAllowOverride(true);
         $this->container->setService(ErrorHandler::class, new PassMiddleware());

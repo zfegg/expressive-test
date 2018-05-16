@@ -11,6 +11,21 @@ use Zend\Diactoros\Stream;
 
 class MockRequestFactory
 {
+    public static $defaultServerParams = [
+        'SERVER_PROTOCOL'    => 'HTTP/1.1',
+        'REQUEST_METHOD'     => 'GET',
+        'SCRIPT_NAME'        => '',
+        'REQUEST_URI'        => '',
+        'QUERY_STRING'       => '',
+        'SERVER_NAME'        => 'localhost',
+        'SERVER_PORT'        => 80,
+        'HTTP_HOST'          => 'localhost',
+        'HTTP_ACCEPT'        => '*/*',
+        'HTTP_USER_AGENT'    => 'Test',
+        'HTTP_CONTENT_TYPE'  => 'application/x-www-form-urlencoded',
+        'REMOTE_ADDR'        => '127.0.0.1',
+        'HTTP_ORIGIN'        => 'http://localhost',
+    ];
 
     /**
      * Create request
@@ -30,22 +45,10 @@ class MockRequestFactory
     ): ServerRequest {
 
         $_SERVER = array_merge(
+            self::$defaultServerParams,
             [
-                'SERVER_PROTOCOL'    => 'HTTP/1.1',
-                'REQUEST_METHOD'     => 'GET',
-                'SCRIPT_NAME'        => '',
-                'REQUEST_URI'        => '',
-                'QUERY_STRING'       => '',
-                'SERVER_NAME'        => 'localhost',
-                'SERVER_PORT'        => 80,
-                'HTTP_HOST'          => 'localhost',
-                'HTTP_ACCEPT'        => '*/*',
-                'HTTP_USER_AGENT'    => 'Test',
-                'HTTP_CONTENT_TYPE'  => 'application/x-www-form-urlencoded',
-                'REMOTE_ADDR'        => '127.0.0.1',
                 'REQUEST_TIME'       => time(),
                 'REQUEST_TIME_FLOAT' => microtime(true),
-                'HTTP_ORIGIN'        => 'http://localhost',
             ],
             $servers
         );
