@@ -46,11 +46,7 @@ abstract class AbstractActionTestCase extends TestCase
         throw new \RuntimeException('Load container error.');
     }
 
-    /**
-     * ServiceManager setUp
-     *
-     */
-    public function setUp()
+    protected function setUp()
     {
         chdir($this->getProjectDir());
         $this->container = $this->loadContainer();
