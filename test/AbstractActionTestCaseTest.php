@@ -3,6 +3,7 @@
 namespace ZfeggTest\ExpressiveTest;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response;
@@ -26,6 +27,12 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
         ];
     }
 
+    public function testMockRequest()
+    {
+        $request = $this->mockRequest();
+        $this->assertInstanceOf(RequestInterface::class, $request);
+    }
+
     /**
      *
      * @dataProvider params
@@ -44,6 +51,24 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
         );
 
         $this->assertInstanceOf(ResponseInterface::class, $response);
+    }
+
+    /**
+     *
+     * @expectedException \RuntimeException
+     */
+    public function testInvalidBodyParamAction()
+    {
+        $app = $this->container->get(Application::class);
+        $app->post('/', [$this, 'postHandler']);
+        $this->runApp(
+            'POST',
+            '/?test=1',
+            ['body' => '2'],
+            ['HTTP_CONTENT_TYPE' => 'application/json'],
+            ['invalid test'],
+            ['cookie' => '3']
+        );
     }
 
     public function postHandler(ServerRequestInterface $request)
