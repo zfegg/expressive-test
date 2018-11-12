@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Zfegg\ExpressiveTest;
 
 use Psr\Http\Message\StreamInterface;
+use function Zend\Diactoros\marshalHeadersFromSapi;
+use function Zend\Diactoros\marshalUriFromSapi;
+use function Zend\Diactoros\normalizeServer;
+use function Zend\Diactoros\normalizeUploadedFiles;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Stream;
@@ -63,9 +67,17 @@ class MockRequestFactory
 
         $_POST = $parsedBody;
 
-        $server  = ServerRequestFactory::normalizeServer($_SERVER);
-        $files   = ServerRequestFactory::normalizeFiles($files);
-        $headers = ServerRequestFactory::marshalHeaders($server);
+        if (function_exists('\Zend\Diactoros\normalizeServer')) { // Diactoros v2.0
+            $server = normalizeServer($_SERVER);
+            $files   = normalizeUploadedFiles($files);
+            $headers = marshalHeadersFromSapi($_SERVER);
+            $uri = marshalUriFromSapi($_SERVER, $headers);
+        } else { // Diactoros v1.7
+            $server  = ServerRequestFactory::normalizeServer($_SERVER);
+            $files   = ServerRequestFactory::normalizeFiles($files);
+            $headers = ServerRequestFactory::marshalHeaders($server);
+            $uri = ServerRequestFactory::marshalUriFromServer($server, $headers);
+        }
 
         if ($body instanceof StreamInterface) {
             $stream = $body;
@@ -82,8 +94,8 @@ class MockRequestFactory
         $request = new ServerRequest(
             $server,
             $files,
-            ServerRequestFactory::marshalUriFromServer($server, $headers),
-            ServerRequestFactory::get('REQUEST_METHOD', $server, 'GET'),
+            $uri,
+            $server['REQUEST_METHOD'] ?? 'GET',
             $stream,
             $headers,
             $cookies,
