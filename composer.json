@@ -2,7 +2,7 @@
     "name": "zfegg/expressive-test",
     "description": "Zend Expressive abstract test case for PHPUnit",
     "require": {
-        "phpunit/phpunit": "^6.0 | ^7.0",
+        "phpunit/phpunit": "^6.0 | ^7.0 | ^8.0",
         "zendframework/zend-expressive": "^3.0",
         "zendframework/zend-diactoros": "^1.7 | ^2.0",
         "zendframework/zend-servicemanager": "^3.3"
