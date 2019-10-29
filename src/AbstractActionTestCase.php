@@ -9,13 +9,14 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
-use Zend\Diactoros\ServerRequest;
 use Zend\Expressive\Application;
 use Zend\Expressive\MiddlewareFactory;
 use Zend\Stratigility\Middleware\ErrorHandler;
 
 abstract class AbstractActionTestCase extends TestCase
 {
+    use Helper\MakeHttpRequestTrait;
+
     /**
      * @var ContainerInterface|\Zend\ServiceManager\ServiceManager
      */
@@ -46,7 +47,7 @@ abstract class AbstractActionTestCase extends TestCase
         throw new \RuntimeException('Load container error.');
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         chdir($this->getProjectDir());
         $this->container = $this->loadContainer();
@@ -90,25 +91,5 @@ abstract class AbstractActionTestCase extends TestCase
         $app = $this->container->get(Application::class);
 
         return $app->handle($request);
-    }
-
-    /**
-     * @param array $servers
-     * @param array|null $parsedBody
-     * @param string|\Psr\Http\Message\StreamInterface $body
-     * @param array $cookies
-     * @param array $files
-     * @return ServerRequest
-     * @deprecated Instead of MockRequestFactory::create
-     */
-    public static function mockRequest(
-        $servers = [],
-        array $parsedBody = null,
-        $body = null,
-        array $cookies = [],
-        array $files = []
-    ): ServerRequest {
-
-        return MockRequestFactory::create($servers, $parsedBody, $body, $cookies, $files);
     }
 }
