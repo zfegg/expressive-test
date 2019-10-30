@@ -8,6 +8,7 @@ matrix:
         - EXECUTE_TEST_COVERALLS=true
         - CS_CHECK=true
     - php: 7.2
+    - php: 7.3
 
 cache:
   directories:
