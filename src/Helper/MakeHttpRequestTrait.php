@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Zfegg\ExpressiveTest\Helper;
-
 
 use Psr\Http\Message\ResponseInterface;
 use Zend\ServiceManager\ServiceManager;
@@ -43,9 +43,10 @@ trait MakeHttpRequestTrait
      * Define additional headers to be sent with the request.
      *
      * @param  array $headers
+     *
      * @return $this
      */
-    public function withHeaders(array $headers)
+    public function withHeaders(array $headers): self
     {
         $this->defaultHeaders = array_merge($this->defaultHeaders, $headers);
 
@@ -57,9 +58,10 @@ trait MakeHttpRequestTrait
      *
      * @param  string $name
      * @param  string $value
+     *
      * @return $this
      */
-    public function withHeader(string $name, string $value)
+    public function withHeader(string $name, string $value): self
     {
         $this->defaultHeaders[$name] = $value;
 
@@ -71,7 +73,7 @@ trait MakeHttpRequestTrait
      *
      * @return $this
      */
-    public function flushHeaders()
+    public function flushHeaders(): self
     {
         $this->defaultHeaders = [];
 
@@ -81,10 +83,11 @@ trait MakeHttpRequestTrait
     /**
      * Define a set of server variables to be sent with the requests.
      *
-     * @param  array  $server
+     * @param  array $server
+     *
      * @return $this
      */
-    public function withServerVariables(array $server)
+    public function withServerVariables(array $server): self
     {
         $this->serverVariables = $server;
 
@@ -94,12 +97,13 @@ trait MakeHttpRequestTrait
     /**
      * Disable middleware for the test.
      *
-     * @param  string|array  $middleware
+     * @param  string|array $middleware
+     *
      * @return $this
      */
-    public function withoutMiddleware($middleware)
+    public function withoutMiddleware($middleware): self
     {
-        foreach ((array) $middleware as $abstract) {
+        foreach ((array)$middleware as $abstract) {
             $this->container->setService($abstract, new PassMiddleware());
         }
 
@@ -109,10 +113,11 @@ trait MakeHttpRequestTrait
     /**
      * Define additional cookies to be sent with the request.
      *
-     * @param  array  $cookies
+     * @param  array $cookies
+     *
      * @return $this
      */
-    public function withCookies(array $cookies)
+    public function withCookies(array $cookies): self
     {
         $this->defaultCookies = array_merge($this->defaultCookies, $cookies);
 
@@ -122,36 +127,27 @@ trait MakeHttpRequestTrait
     /**
      * Add a cookie to be sent with the request.
      *
-     * @param  string  $name
-     * @param  string  $value
+     * @param  string $name
+     * @param  string $value
+     *
      * @return $this
      */
-    public function withCookie(string $name, string $value)
+    public function withCookie(string $name, string $value): self
     {
         $this->defaultCookies[$name] = $value;
 
         return $this;
     }
 
-    /**
-     * Automatically follow any redirects returned from the response.
-     *
-     * @return $this
-     */
-    public function followingRedirects()
-    {
-        $this->followRedirects = true;
-
-        return $this;
-    }
 
     /**
      * Set the referer header and previous URL session value in order to simulate a previous request.
      *
-     * @param  string  $url
+     * @param  string $url
+     *
      * @return $this
      */
-    public function from(string $url)
+    public function from(string $url): self
     {
         return $this->withHeader('referer', $url);
     }
@@ -159,11 +155,12 @@ trait MakeHttpRequestTrait
     /**
      * Visit the given URI with a GET request.
      *
-     * @param  string  $uri
+     * @param  string $uri
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function get($uri, array $headers = [])
+    public function get(string $uri, array $headers = []): TestResponse
     {
         $server = $this->transformHeadersToServerVars($headers);
 
@@ -173,11 +170,12 @@ trait MakeHttpRequestTrait
     /**
      * Visit the given URI with a GET request, expecting a JSON response.
      *
-     * @param  string  $uri
+     * @param  string $uri
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function getJson($uri, array $headers = [])
+    public function getJson(string $uri, array $headers = []): TestResponse
     {
         return $this->json('GET', $uri, [], $headers);
     }
@@ -185,12 +183,13 @@ trait MakeHttpRequestTrait
     /**
      * Visit the given URI with a POST request.
      *
-     * @param  string  $uri
+     * @param  string $uri
      * @param  array  $data
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function post($uri, array $data = [], array $headers = [])
+    public function post(string $uri, array $data = [], array $headers = []): TestResponse
     {
         $server = $this->transformHeadersToServerVars($headers);
 
@@ -200,12 +199,13 @@ trait MakeHttpRequestTrait
     /**
      * Visit the given URI with a POST request, expecting a JSON response.
      *
-     * @param  string  $uri
+     * @param  string $uri
      * @param  array  $data
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function postJson($uri, array $data = [], array $headers = [])
+    public function postJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
         return $this->json('POST', $uri, $data, $headers);
     }
@@ -213,12 +213,13 @@ trait MakeHttpRequestTrait
     /**
      * Visit the given URI with a PUT request.
      *
-     * @param  string  $uri
+     * @param  string $uri
      * @param  array  $data
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function put($uri, array $data = [], array $headers = [])
+    public function put(string $uri, array $data = [], array $headers = []): TestResponse
     {
         $server = $this->transformHeadersToServerVars($headers);
 
@@ -228,12 +229,13 @@ trait MakeHttpRequestTrait
     /**
      * Visit the given URI with a PUT request, expecting a JSON response.
      *
-     * @param  string  $uri
+     * @param  string $uri
      * @param  array  $data
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function putJson($uri, array $data = [], array $headers = [])
+    public function putJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
         return $this->json('PUT', $uri, $data, $headers);
     }
@@ -241,12 +243,13 @@ trait MakeHttpRequestTrait
     /**
      * Visit the given URI with a PATCH request.
      *
-     * @param  string  $uri
+     * @param  string $uri
      * @param  array  $data
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function patch($uri, array $data = [], array $headers = [])
+    public function patch(string $uri, array $data = [], array $headers = []): TestResponse
     {
         $server = $this->transformHeadersToServerVars($headers);
 
@@ -256,12 +259,13 @@ trait MakeHttpRequestTrait
     /**
      * Visit the given URI with a PATCH request, expecting a JSON response.
      *
-     * @param  string  $uri
+     * @param  string $uri
      * @param  array  $data
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function patchJson($uri, array $data = [], array $headers = [])
+    public function patchJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
         return $this->json('PATCH', $uri, $data, $headers);
     }
@@ -269,12 +273,13 @@ trait MakeHttpRequestTrait
     /**
      * Visit the given URI with a DELETE request.
      *
-     * @param  string  $uri
+     * @param  string $uri
      * @param  array  $data
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function delete($uri, array $data = [], array $headers = [])
+    public function delete(string $uri, array $data = [], array $headers = []): TestResponse
     {
         $server = $this->transformHeadersToServerVars($headers);
 
@@ -282,27 +287,15 @@ trait MakeHttpRequestTrait
     }
 
     /**
-     * Visit the given URI with a DELETE request, expecting a JSON response.
-     *
-     * @param  string  $uri
-     * @param  array  $data
-     * @param  array  $headers
-     * @return TestResponse
-     */
-    public function deleteJson($uri, array $data = [], array $headers = [])
-    {
-        return $this->json('DELETE', $uri, $data, $headers);
-    }
-
-    /**
      * Visit the given URI with a OPTIONS request.
      *
-     * @param  string  $uri
+     * @param  string $uri
      * @param  array  $data
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function options($uri, array $data = [], array $headers = [])
+    public function options(string $uri, array $data = [], array $headers = []): TestResponse
     {
         $server = $this->transformHeadersToServerVars($headers);
 
@@ -310,57 +303,70 @@ trait MakeHttpRequestTrait
     }
 
     /**
-     * Visit the given URI with a OPTIONS request, expecting a JSON response.
-     *
-     * @param  string  $uri
-     * @param  array  $data
-     * @param  array  $headers
-     * @return TestResponse
-     */
-    public function optionsJson($uri, array $data = [], array $headers = [])
-    {
-        return $this->json('OPTIONS', $uri, $data, $headers);
-    }
-
-    /**
      * Call the given URI with a JSON request.
      *
-     * @param  string  $method
-     * @param  string  $uri
+     * @param  string $method
+     * @param  string $uri
      * @param  array  $data
      * @param  array  $headers
+     *
      * @return TestResponse
      */
-    public function json($method, $uri, array $data = [], array $headers = [])
+    public function json(string $method, string $uri, array $data = [], array $headers = []): TestResponse
     {
         $content = json_encode($data);
 
-        $headers = array_merge([
-            'CONTENT_LENGTH' => mb_strlen($content, '8bit'),
-            'CONTENT_TYPE' => 'application/json',
-            'Accept' => 'application/json',
-        ], $headers);
+        $headers = array_merge(
+            [
+                'CONTENT_LENGTH' => mb_strlen($content, '8bit'),
+                'CONTENT_TYPE'   => 'application/json',
+                'Accept'         => 'application/json',
+            ],
+            $headers
+        );
 
         return $this->call(
-            $method, $uri, [], [], [], $this->transformHeadersToServerVars($headers), $content
+            $method,
+            $uri,
+            [],
+            [],
+            [],
+            $this->transformHeadersToServerVars($headers),
+            $content
         );
     }
 
     /**
      * Call the given URI and return the Response.
      *
-     * @param  string  $method
-     * @param  string  $uri
-     * @param  array  $parameters
-     * @param  array  $cookies
-     * @param  array  $files
-     * @param  array  $server
-     * @param  string|null  $content
+     * @param  string $method
+     * @param  string $uri
+     * @param  array $parameters
+     * @param  array $cookies
+     * @param  array $files
+     * @param  array $server
+     * @param  string|null $content
+     *
      * @return TestResponse
      */
-    public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null): TestResponse
-    {
-        $response = $this->runApp($method, $uri, $parameters, $server, $content, $cookies + $this->defaultCookies, $files);
+    public function call(
+        string $method,
+        string $uri,
+        array $parameters = [],
+        array $cookies = [],
+        array $files = [],
+        array $server = [],
+        ?string $content = null
+    ): TestResponse {
+        $response = $this->runApp(
+            $method,
+            $uri,
+            $parameters,
+            $server,
+            $content,
+            $cookies + $this->defaultCookies,
+            $files
+        );
 
         return $this->createTestResponse($response);
     }
@@ -368,10 +374,11 @@ trait MakeHttpRequestTrait
     /**
      * Transform headers array to array of $_SERVER vars with HTTP_* format.
      *
-     * @param  array  $headers
+     * @param  array $headers
+     *
      * @return array
      */
-    protected function transformHeadersToServerVars(array $headers)
+    protected function transformHeadersToServerVars(array $headers): array
     {
         $servers = [];
         foreach (($this->defaultHeaders + $headers) as $name => $value) {
@@ -384,13 +391,14 @@ trait MakeHttpRequestTrait
     /**
      * Format the header name for the server array.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return string
      */
-    protected function formatServerHeaderKey($name)
+    protected function formatServerHeaderKey($name): string
     {
-        if (strpos($name, 'HTTP_') !== false && $name !== 'CONTENT_TYPE' && $name !== 'REMOTE_ADDR') {
-            return 'HTTP_'.$name;
+        if (strpos($name, 'HTTP_') !== 0 && $name !== 'CONTENT_TYPE' && $name !== 'REMOTE_ADDR') {
+            return 'HTTP_' . $name;
         }
 
         return $name;

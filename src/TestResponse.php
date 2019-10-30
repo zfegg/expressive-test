@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Zfegg\ExpressiveTest;
 
@@ -59,7 +60,7 @@ class TestResponse
     {
         Assert::assertTrue(
             $this->getStatusCode() >= 200 && $this->getStatusCode() < 300,
-            'Response status code ['.$this->getStatusCode().'] is not a successful status code.'
+            'Response status code [' . $this->getStatusCode() . '] is not a successful status code.'
         );
 
         return $this;
@@ -75,7 +76,7 @@ class TestResponse
         Assert::assertEquals(
             200,
             $this->getStatusCode(),
-            'Response status code ['.$this->getStatusCode().'] does not match expected 200 status code.'
+            'Response status code [' . $this->getStatusCode() . '] does not match expected 200 status code.'
         );
 
         return $this;
@@ -92,7 +93,7 @@ class TestResponse
 
         Assert::assertTrue(
             201 === $actual,
-            'Response status code ['.$actual.'] does not match expected 201 status code.'
+            'Response status code [' . $actual . '] does not match expected 201 status code.'
         );
 
         return $this;
@@ -123,7 +124,7 @@ class TestResponse
         Assert::assertEquals(
             404,
             $this->getStatusCode(),
-            'Response status code ['.$this->getStatusCode().'] is not a not found status code.'
+            'Response status code [' . $this->getStatusCode() . '] is not a not found status code.'
         );
 
         return $this;
@@ -138,7 +139,7 @@ class TestResponse
     {
         Assert::assertTrue(
             $this->getStatusCode() == 403,
-            'Response status code ['.$this->getStatusCode().'] is not a forbidden status code.'
+            'Response status code [' . $this->getStatusCode() . '] is not a forbidden status code.'
         );
 
         return $this;
@@ -155,7 +156,7 @@ class TestResponse
 
         Assert::assertTrue(
             401 === $actual,
-            'Response status code ['.$actual.'] is not an unauthorized status code.'
+            'Response status code [' . $actual . '] is not an unauthorized status code.'
         );
 
         return $this;
@@ -189,7 +190,7 @@ class TestResponse
     {
         Assert::assertTrue(
             $this->getStatusCode() == 301 || $this->getStatusCode() == 302,
-            'Response status code ['.$this->getStatusCode().'] is not a redirect status code.'
+            'Response status code [' . $this->getStatusCode() . '] is not a redirect status code.'
         );
 
         if (! is_null($uri)) {
@@ -209,14 +210,16 @@ class TestResponse
     public function assertHeader($headerName, $value = null)
     {
         Assert::assertTrue(
-            $this->hasHeader($headerName), "Header [{$headerName}] not present on response."
+            $this->hasHeader($headerName),
+            "Header [{$headerName}] not present on response."
         );
 
         $actual = $this->getHeaderLine($headerName);
 
         if (! is_null($value)) {
             Assert::assertEquals(
-                $value, $actual,
+                $value,
+                $actual,
                 "Header [{$headerName}] was found, but value [{$actual}] does not match [{$value}]."
             );
         }
@@ -233,7 +236,8 @@ class TestResponse
     public function assertHeaderMissing($headerName)
     {
         Assert::assertFalse(
-            $this->hasHeader($headerName), "Unexpected header [{$headerName}] is present on response."
+            $this->hasHeader($headerName),
+            "Unexpected header [{$headerName}] is present on response."
         );
 
         return $this;
@@ -248,25 +252,13 @@ class TestResponse
     public function assertLocation($uri)
     {
         Assert::assertEquals(
-            $uri, $this->getHeaderLine('Location')
+            $uri,
+            $this->getHeaderLine('Location')
         );
 
         return $this;
     }
 
-    /**
-     * Asserts that the response contains the given cookie and equals the optional value.
-     *
-     * @param  string  $cookieName
-     * @param  mixed  $value
-     * @return $this
-     */
-    public function assertPlainCookie($cookieName, $value = null)
-    {
-        $this->assertCookie($cookieName, $value);
-
-        return $this;
-    }
 
     /**
      * Asserts that the response contains the given cookie and equals the optional value.
@@ -289,7 +281,8 @@ class TestResponse
         $cookieValue = $cookie->getValue();
 
         Assert::assertEquals(
-            $value, $cookieValue,
+            $value,
+            $cookieValue,
             "Cookie [{$cookieName}] was found, but value [{$cookieValue}] does not match [{$value}]."
         );
 
@@ -376,7 +369,7 @@ class TestResponse
      */
     public function assertSee($value)
     {
-        Assert::assertContains((string) $value, (string)$this->getBody());
+        Assert::assertStringContainsString((string) $value, (string)$this->getBody());
 
         return $this;
     }
@@ -389,7 +382,7 @@ class TestResponse
      */
     public function assertSeeText($value)
     {
-        Assert::assertContains((string) $value, strip_tags((string)$this->getBody()));
+        Assert::assertStringContainsString((string) $value, strip_tags((string)$this->getBody()));
 
         return $this;
     }
@@ -402,7 +395,7 @@ class TestResponse
      */
     public function assertDontSee($value)
     {
-        Assert::assertNotContains((string) $value, (string)$this->getBody());
+        Assert::assertStringNotContainsString((string) $value, (string)$this->getBody());
 
         return $this;
     }
@@ -415,7 +408,7 @@ class TestResponse
      */
     public function assertDontSeeText($value)
     {
-        Assert::assertNotContains((string) $value, strip_tags((string)$this->getBody()));
+        Assert::assertStringNotContainsString((string) $value, strip_tags((string)$this->getBody()));
 
         return $this;
     }
@@ -427,10 +420,12 @@ class TestResponse
      * @param  bool  $strict
      * @return $this
      */
-    public function assertJson(array $data, $strict = false)
+    public function assertJson(array $data, bool $strict = true)
     {
-        Assert::assertEquals(
-            $data, array_intersect_key($data, $this->json()), $strict, $this->assertJsonMessage($data)
+        Assert::{$strict ? 'assertSame' : 'assertEquals'}(
+            $data,
+            array_intersect_key($this->json(), $data),
+            $this->assertJsonMessage($data)
         );
 
         return $this;
@@ -448,10 +443,10 @@ class TestResponse
 
         $actual = json_encode($this->json(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-        return 'Unable to find JSON: '.PHP_EOL.PHP_EOL.
-            "[{$expected}]".PHP_EOL.PHP_EOL.
-            'within response JSON:'.PHP_EOL.PHP_EOL.
-            "[{$actual}].".PHP_EOL.PHP_EOL;
+        return 'Unable to find JSON: ' . PHP_EOL . PHP_EOL .
+            "[{$expected}]" . PHP_EOL . PHP_EOL .
+            'within response JSON:' . PHP_EOL . PHP_EOL .
+            "[{$actual}]." . PHP_EOL . PHP_EOL;
     }
 
     /**
@@ -462,7 +457,7 @@ class TestResponse
      * @param  bool  $strict
      * @return $this
      */
-    public function assertJsonPath($path, $expect, $strict = false)
+    public function assertJsonPath(string $path, $expect, $strict = false)
     {
         if ($strict) {
             Assert::assertSame($expect, $this->json($path));
@@ -504,14 +499,16 @@ class TestResponse
         foreach ($data as $key => $value) {
             $unexpected = $this->jsonSearchStrings($key, $value);
 
-            Assert::assertNotContains(
-                $actual,
-                $unexpected,
-                'Found unexpected JSON fragment: '.PHP_EOL.PHP_EOL.
-                '['.json_encode([$key => $value]).']'.PHP_EOL.PHP_EOL.
-                'within'.PHP_EOL.PHP_EOL.
-                "[{$actual}]."
-            );
+            foreach ($unexpected as $value2) {
+                Assert::assertStringNotContainsString(
+                    $value2,
+                    $actual,
+                    'Found unexpected JSON fragment: ' . PHP_EOL . PHP_EOL .
+                    '[' . json_encode([$key => $value]) . ']' . PHP_EOL . PHP_EOL .
+                    'within' . PHP_EOL . PHP_EOL .
+                    "[{$actual}]."
+                );
+            }
         }
 
         return $this;
@@ -531,15 +528,19 @@ class TestResponse
         foreach ($data as $key => $value) {
             $unexpected = $this->jsonSearchStrings($key, $value);
 
-            if (strpos($actual, $unexpected) === false) {
+            $rs = array_filter($unexpected, function ($val) use ($actual) {
+                return strpos($actual, $val) !== false;
+            });
+            if (count($rs) === 0) {
+                Assert::assertEquals(0, count($rs));
                 return $this;
             }
         }
 
         Assert::fail(
-            'Found unexpected JSON fragment: '.PHP_EOL.PHP_EOL.
-            '['.json_encode($data).']'.PHP_EOL.PHP_EOL.
-            'within'.PHP_EOL.PHP_EOL.
+            'Found unexpected JSON fragment: ' . PHP_EOL . PHP_EOL .
+            '[' . json_encode($data) . ']' . PHP_EOL . PHP_EOL .
+            'within' . PHP_EOL . PHP_EOL .
             "[{$actual}]."
         );
     }
@@ -556,9 +557,9 @@ class TestResponse
         $needle = substr(json_encode([$key => $value]), 1, -1);
 
         return [
-            $needle.']',
-            $needle.'}',
-            $needle.',',
+            $needle . ']',
+            $needle . '}',
+            $needle . ',',
         ];
     }
 
@@ -609,14 +610,16 @@ class TestResponse
     {
         if ($key) {
             Assert::assertCount(
-                $count, self::arrayGet($this->json(), $key),
+                $count,
+                self::arrayGet($this->json(), $key),
                 "Failed to assert that the response count matched the expected {$count}"
             );
 
             return $this;
         }
 
-        Assert::assertCount($count,
+        Assert::assertCount(
+            $count,
             $this->json(),
             "Failed to assert that the response count matched the expected {$count}"
         );
@@ -639,7 +642,7 @@ class TestResponse
             Assert::fail('Invalid JSON was returned from the route.');
         }
 
-        return $key ? $decodedResponse[$key] : $decodedResponse;
+        return $key ? self::arrayGet($decodedResponse, $key) : $decodedResponse;
     }
 
 
@@ -665,7 +668,6 @@ class TestResponse
 
         while (! is_null($segment = array_shift($key))) {
             if ($segment === '*') {
-
                 $result = [];
 
                 foreach ($target as $item) {
@@ -675,7 +677,7 @@ class TestResponse
                 return in_array('*', $key) ? array_merge([], ...$result) : $result;
             }
 
-            if (is_array($target) && array_key_exists($target, $segment)) {
+            if (is_array($target) && array_key_exists($segment, $target)) {
                 $target = $target[$segment];
             } elseif (is_object($target) && isset($target->{$segment})) {
                 $target = $target->{$segment};

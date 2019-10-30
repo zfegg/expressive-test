@@ -33,7 +33,7 @@
     },
     "require-dev": {
         "ext-json": "*",
-        "zendframework/zend-coding-standard": "^1.0",
+        "squizlabs/php_codesniffer": "^3.5",
         "zendframework/zend-config-aggregator": "^1.1",
         "zendframework/zend-expressive-fastroute": "^3.0"
     }

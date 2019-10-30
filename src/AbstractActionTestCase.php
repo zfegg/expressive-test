@@ -73,10 +73,10 @@ abstract class AbstractActionTestCase extends TestCase
     }
 
     public function runApp(
-        $method,
-        $requestUri,
+        string $method,
+        string $requestUri,
         array $parsedBody = [],
-        $servers = [],
+        array $servers = [],
         $body = null,
         array $cookies = [],
         array $files = []

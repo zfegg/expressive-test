@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace Zfegg\ExpressiveTest;
 
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
+use Zend\Diactoros\ServerRequest;
+use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\Stream;
+
 use function Zend\Diactoros\marshalHeadersFromSapi;
 use function Zend\Diactoros\marshalUriFromSapi;
 use function Zend\Diactoros\normalizeServer;
 use function Zend\Diactoros\normalizeUploadedFiles;
-use Zend\Diactoros\ServerRequest;
-use Zend\Diactoros\ServerRequestFactory;
-use Zend\Diactoros\Stream;
 
 class MockRequestFactory
 {
@@ -87,7 +89,7 @@ class MockRequestFactory
                 $stream->write($body);
                 $stream->rewind();
             } elseif (! is_null($body)) {
-                throw new \RuntimeException('Invalid body type');
+                throw new RuntimeException('Invalid body type');
             }
         }
 
