@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Zend\ConfigAggregator\ConfigAggregator;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ConfigAggregator\ConfigAggregator;
+use Laminas\ServiceManager\Config;
+use Laminas\ServiceManager\ServiceManager;
 
 $aggregator = new ConfigAggregator([
-    \Zend\Expressive\Router\FastRouteRouter\ConfigProvider::class,
-    \Zend\Expressive\ConfigProvider::class,
-    \Zend\Expressive\Router\ConfigProvider::class,
+    \Mezzio\Router\FastRouteRouter\ConfigProvider::class,
+    \Mezzio\ConfigProvider::class,
+    \Mezzio\Router\ConfigProvider::class,
 ]);
 
 $config = $aggregator->getMergedConfig();

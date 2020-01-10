@@ -7,7 +7,7 @@ namespace Zfegg\ExpressiveTest;
 use Dflydev\FigCookies\SetCookie;
 use Dflydev\FigCookies\SetCookies;
 use PHPUnit\Framework\TestCase;
-use Zend\Diactoros\Response;
+use Laminas\Diactoros\Response;
 
 class TestResponseTest extends TestCase
 {

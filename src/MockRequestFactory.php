@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Zfegg\ExpressiveTest;
 
+use Laminas\Diactoros\ServerRequest;
+use Laminas\Diactoros\ServerRequestFactory;
+use Laminas\Diactoros\Stream;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
-use Zend\Diactoros\ServerRequest;
-use Zend\Diactoros\ServerRequestFactory;
-use Zend\Diactoros\Stream;
-
-use function Zend\Diactoros\marshalHeadersFromSapi;
-use function Zend\Diactoros\marshalUriFromSapi;
-use function Zend\Diactoros\normalizeServer;
-use function Zend\Diactoros\normalizeUploadedFiles;
+use function Laminas\Diactoros\marshalHeadersFromSapi;
+use function Laminas\Diactoros\marshalUriFromSapi;
+use function Laminas\Diactoros\normalizeServer;
+use function Laminas\Diactoros\normalizeUploadedFiles;
 
 class MockRequestFactory
 {
@@ -69,7 +68,7 @@ class MockRequestFactory
 
         $_POST = $parsedBody;
 
-        if (function_exists('\Zend\Diactoros\normalizeServer')) { // Diactoros v2.0
+        if (function_exists('\Laminas\Diactoros\normalizeServer')) { // Diactoros v2.0
             $server = normalizeServer($_SERVER);
             $files   = normalizeUploadedFiles($files);
             $headers = marshalHeadersFromSapi($_SERVER);

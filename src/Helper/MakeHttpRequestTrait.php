@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Zfegg\ExpressiveTest\Helper;
 
+use Laminas\ServiceManager\ServiceManager;
 use Psr\Http\Message\ResponseInterface;
-use Zend\ServiceManager\ServiceManager;
 use Zfegg\ExpressiveTest\PassMiddleware;
 use Zfegg\ExpressiveTest\TestResponse;
 
