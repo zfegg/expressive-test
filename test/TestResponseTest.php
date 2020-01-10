@@ -6,6 +6,7 @@ namespace Zfegg\ExpressiveTest;
 
 use Dflydev\FigCookies\SetCookie;
 use Dflydev\FigCookies\SetCookies;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 use Laminas\Diactoros\Response;
 
@@ -28,6 +29,7 @@ class TestResponseTest extends TestCase
             'data' => [1,2,3],
             'data2' => ['data3' => 'a', 'data4' => 'b']
         ])));
+        $response->assertJsonCount(2);
         $response->assertJsonCount(3, 'data');
         $response->assertJsonCount(2, 'data2.*');
     }
@@ -44,6 +46,10 @@ class TestResponseTest extends TestCase
             [1,2,3],
             (new TestResponse(new Response\JsonResponse(['data' => [1,2,3]])))->json('data')
         );
+
+        $this->expectException(AssertionFailedError::class);
+
+        (new TestResponse(new Response\EmptyResponse()))->json();
     }
 
     public function testAssertOkAndSuccessful()
@@ -132,6 +138,7 @@ class TestResponseTest extends TestCase
             'data2' => ['data3' => 'a', 'data4' => 'b']
         ])));
         $response->assertJsonPath('data2.*', ['a', 'b']);
+        $response->assertJsonPath('data2.*', ['a', 'b'], true);
     }
 
     public function testAssertJsonMissing()
@@ -141,15 +148,17 @@ class TestResponseTest extends TestCase
             'data2' => ['data3' => 'a', 'data4' => 'data']
         ])));
         $response->assertJsonMissing(['data3']);
+        $response->assertJsonMissing(['data3'], true);
     }
 
     public function testAssertJsonStructure()
     {
         $response = (new TestResponse(new Response\JsonResponse([
-            'data' => [1,2,3],
-            'data2' => ['data3' => 'a', 'data4' => 'data']
+            'data' => ['data3' => 'a', 'data4' => 'data'],
+            'data2' => ['data3' => 'b', 'data4' => 'data']
         ])));
         $response->assertJsonStructure(['data']);
+        $response->assertJsonStructure(['*' => ['data3']]);
     }
 
     public function testAssertSee()

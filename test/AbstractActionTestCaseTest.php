@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ZfeggTest\ExpressiveTest;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,6 +18,12 @@ use Zfegg\ExpressiveTest\TestResponse;
 
 class AbstractActionTestCaseTest extends AbstractActionTestCase
 {
+    public function testLoadContainer()
+    {
+        $this->assertEquals($this->container, $this->loadContainer());
+        $this->assertInstanceOf(ContainerInterface::class, $this->loadContainer());
+    }
+
     public function params()
     {
         $body = '{"a":"b"}';
