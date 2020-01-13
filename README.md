@@ -22,13 +22,14 @@ composer require zfegg/expressive-test --dev
 Usage / 使用
 --------------
 
+### `runApp(...)`
 
 ```php
 
 use Psr\Http\Message\ResponseInterface;
 use Zfegg\ExpressiveTest\AbstractActionTestCase;
 
-class HomePageTest extend AbstractActionTestCase {
+class HomePageTest extends AbstractActionTestCase {
 
     public function testHome() {
         $response = $this->runApp(
@@ -44,8 +45,7 @@ class HomePageTest extend AbstractActionTestCase {
     }
 
     public function testPassMiddlewareOrMockService() {
-    
-        
+
         $this->container->setService('some middleware', new PassMiddleware());
         
         $mock = $this->createMock(SomeService::class);
@@ -64,3 +64,83 @@ class HomePageTest extend AbstractActionTestCase {
     }
 }
 ```
+
+### Simple test methods like Laravel
+
+```php
+
+use Psr\Http\Message\ResponseInterface;
+use Zfegg\ExpressiveTest\AbstractActionTestCase;
+
+class HomePageTest extends AbstractActionTestCase {
+
+    public function testHome() {
+        /*
+        $this->get($uri, $headers = []);
+        $this->getJson($uri, $headers = []);
+        $this->post($uri, $data = [], $headers = []);
+        $this->postJson($uri, $data = [], $headers = []);
+        $this->put($uri, $data = [], $headers = []);
+        $this->putJson($uri, $data = [], $headers = []);
+        $this->patch($uri, $data = [], $headers = []);
+        $this->patchJson($uri, $data = [], $headers = []);
+        $this->delete($uri, $data = [], $headers = []);
+        $this->json($method, $uri, $data = [], $headers = []);
+        $this->call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null);
+        */
+        $response = $this->getJson('/?test=1');
+        $response->assertOk();
+        $response->assertSuccessful();
+    }
+
+    public function testRedirectLogin() {
+        $response = $this->getJson('/redirect');
+        $response->assertRedirect('/login');
+    }
+}
+```
+
+### Test support methods
+
+- `get($uri, $headers = [])`
+- `getJson($uri, $headers = [])`
+- `post($uri, $data = [], $headers = [])`
+- `postJson($uri, $data = [], $headers = [])`
+- `put($uri, $data = [], $headers = [])`
+- `putJson($uri, $data = [], $headers = [])`
+- `patch($uri, $data = [], $headers = [])`
+- `patchJson($uri, $data = [], $headers = [])`
+- `delete($uri, $data = [], $headers = [])`
+- `json($method, $uri, $data = [], $headers = [])`
+- `call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)`
+
+### Assert methods
+
+- `assertCookie`
+- `assertCookieExpired`
+- `assertCookieMissing`
+- `assertCookieNotExpired`
+- `assertCreated`
+- `assertDontSee`
+- `assertDontSeeText`
+- `assertExactJson`
+- `assertForbidden`
+- `assertHeader`
+- `assertHeaderMissing`
+- `assertJson`
+- `assertJsonCount`
+- `assertJsonMessage`
+- `assertJsonMissing`
+- `assertJsonMissingExact`
+- `assertJsonPath`
+- `assertJsonStructure`
+- `assertLocation`
+- `assertNoContent`
+- `assertNotFound`
+- `assertOk`
+- `assertRedirect`
+- `assertSee`
+- `assertSeeText`
+- `assertStatus`
+- `assertSuccessful`
+- `assertUnauthorized`
