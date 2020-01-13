@@ -9,6 +9,7 @@ use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\Diactoros\Stream;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
+
 use function Laminas\Diactoros\marshalHeadersFromSapi;
 use function Laminas\Diactoros\marshalUriFromSapi;
 use function Laminas\Diactoros\normalizeServer;

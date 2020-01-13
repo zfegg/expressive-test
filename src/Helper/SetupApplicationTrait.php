@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Zfegg\ExpressiveTest\Helper;
 
 use Composer\Autoload\ClassLoader;
