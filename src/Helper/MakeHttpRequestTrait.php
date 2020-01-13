@@ -339,13 +339,13 @@ trait MakeHttpRequestTrait
     /**
      * Call the given URI and return the Response.
      *
-     * @param  string $method
-     * @param  string $uri
-     * @param  array $parameters
-     * @param  array $cookies
-     * @param  array $files
-     * @param  array $server
-     * @param  string|null $content
+     * @param string               $uri        The URI
+     * @param string               $method     The HTTP method
+     * @param array                $parameters The query (GET) or request (POST) parameters
+     * @param array                $cookies    The request cookies ($_COOKIE)
+     * @param array                $files      The request files ($_FILES)
+     * @param array                $server     The server parameters ($_SERVER)
+     * @param string|null          $content
      *
      * @return TestResponse
      */
@@ -358,6 +358,15 @@ trait MakeHttpRequestTrait
         array $server = [],
         ?string $content = null
     ): TestResponse {
+        if (strtoupper($method) == 'GET' && $parameters) {
+            if (strpos($uri, '?') !== false) {
+                $uri .= '&' . http_build_query($parameters);
+            } else {
+                $uri .= '?' . http_build_query($parameters);
+            }
+            $parameters = [];
+        }
+
         $response = $this->runApp(
             $method,
             $uri,

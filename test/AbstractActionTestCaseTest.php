@@ -206,4 +206,24 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
         $response->assertOk()
                 ->assertJson(['a' => 123]);
     }
+
+    public function testCallGetParameters()
+    {
+        /** @var Application $app */
+        $app = $this->container->get(Application::class);
+        $app->get('/', function (ServerRequestInterface $request) {
+            $this->assertEquals(['test' => '123'], $request->getQueryParams());
+            return new Response\EmptyResponse();
+        });
+        $app->get('/test2', function (ServerRequestInterface $request) {
+            $this->assertEquals(['test' => '123', 'key2' => 'val2'], $request->getQueryParams());
+            return new Response\EmptyResponse();
+        });
+
+        $response = $this->call('GET', '/', ['test' => '123']);
+        $response->assertNoContent();
+
+        $response = $this->call('GET', '/test2?key2=val2', ['test' => '123']);
+        $response->assertNoContent();
+    }
 }
