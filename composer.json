@@ -7,8 +7,7 @@
         "mezzio/mezzio": "^3.0",
         "laminas/laminas-diactoros": "^1.7 | ^2.0",
         "laminas/laminas-servicemanager": "^3.3",
-        "dflydev/fig-cookies": "^2.0",
-        "laminas/laminas-dependency-plugin": "^1.0"
+        "dflydev/fig-cookies": "^2.0"
     },
     "license": "MIT",
     "keywords": [
