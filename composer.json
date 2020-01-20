@@ -12,6 +12,7 @@
     "license": "MIT",
     "keywords": [
         "zend",
+        "laminas",
         "expressive",
         "test",
         "phpunit"

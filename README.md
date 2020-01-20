@@ -22,7 +22,7 @@ composer require zfegg/expressive-test --dev
 Usage / 使用
 --------------
 
-### `runApp(...)`
+### `runApp(...)` in test.
 
 ```php
 
@@ -114,7 +114,7 @@ class HomePageTest extends AbstractActionTestCase {
 - `json($method, $uri, $data = [], $headers = [])`
 - `call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)`
 
-### Assert methods
+### Response assert methods
 
 - `assertCookie`
 - `assertCookieExpired`
@@ -144,3 +144,25 @@ class HomePageTest extends AbstractActionTestCase {
 - `assertStatus`
 - `assertSuccessful`
 - `assertUnauthorized`
+
+
+### `PassMiddleware`
+
+For pass a middleware. As default it will pass [`ErrorHandler::class`0(src/Helper/SetupApplicationTrait.php#55).
+
+```php
+use Psr\Http\Message\ResponseInterface;
+use Zfegg\ExpressiveTest\AbstractActionTestCase;
+use Zfegg\ExpressiveTest\PassMiddleware;
+
+class HomePageTest extends AbstractActionTestCase {
+
+    public function testHome() {
+        // Pass a authentication middleware.
+        $this->container->setService(AuthenticationMiddleware::class, PassMiddleware::class); 
+
+        $response = $this->getJson('/api/users');
+        $response->assertOk();
+    }
+}
+```
