@@ -3,7 +3,7 @@
     "description": "Zend Expressive abstract test case for PHPUnit",
     "require": {
         "php": "^7.2",
-        "phpunit/phpunit": "^6.0 | ^7.0 | ^8.0",
+        "phpunit/phpunit": "^6.0 | ^7.0 | ^8.0 | ^9.0",
         "mezzio/mezzio": "^3.0",
         "laminas/laminas-diactoros": "^1.7 | ^2.0",
         "laminas/laminas-servicemanager": "^3.3",
