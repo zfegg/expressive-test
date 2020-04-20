@@ -148,7 +148,7 @@ class HomePageTest extends AbstractActionTestCase {
 
 ### `PassMiddleware`
 
-For pass a middleware. As default it will pass [`ErrorHandler::class`](src/Helper/SetupApplicationTrait.php#55).
+For pass a middleware. As default it will pass [`ErrorHandler::class`](src/Helper/SetupApplicationTrait.php#L55).
 
 ```php
 use Psr\Http\Message\ResponseInterface;
