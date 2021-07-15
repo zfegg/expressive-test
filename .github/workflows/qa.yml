@@ -11,8 +11,8 @@ jobs:
         php-versions: ['7.3', '7.4', '8.0']
         include:
           - php: '8.0'
-              upload_coverage: true
-              cs_check: true
+            upload_coverage: true
+            cs_check: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
