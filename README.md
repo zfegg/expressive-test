@@ -1,7 +1,7 @@
 Mezzio (Expressive) handler test
 ================================
 
-[![Build Status](https://travis-ci.org/zfegg/expressive-test.png)](https://travis-ci.org/zfegg/expressive-test)
+[![GitHub Actions: Run tests](https://github.com/zfegg/expressive-test/workflows/qa/badge.svg)](https://github.com/zfegg/expressive-test/actions?query=workflow%3A%22qa%22)
 [![Coverage Status](https://coveralls.io/repos/github/zfegg/expressive-test/badge.svg?branch=master)](https://coveralls.io/github/zfegg/expressive-test?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/zfegg/expressive-test/v/stable.png)](https://packagist.org/packages/zfegg/expressive-test)
 

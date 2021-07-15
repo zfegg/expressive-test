@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ZfeggTest\ExpressiveTest;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -18,6 +19,8 @@ use Zfegg\ExpressiveTest\TestResponse;
 
 class AbstractActionTestCaseTest extends AbstractActionTestCase
 {
+    use ProphecyTrait;
+
     public function testLoadContainer()
     {
         $this->assertEquals($this->container, $this->loadContainer());
