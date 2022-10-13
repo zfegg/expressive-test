@@ -57,7 +57,7 @@ class MockRequestFactory
                 'REQUEST_TIME_FLOAT' => microtime(true),
             ],
             $servers
-        );
+        ) + $_SERVER;
 
         $urlData = parse_url($_SERVER['REQUEST_URI']);
 
