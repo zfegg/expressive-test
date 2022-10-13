@@ -16,7 +16,6 @@ use Zfegg\ExpressiveTest\TestResponse;
  */
 trait MakeHttpRequestTrait
 {
-
     /**
      * Additional headers for the request.
      *

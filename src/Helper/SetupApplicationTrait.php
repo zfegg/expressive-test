@@ -16,7 +16,6 @@ use Zfegg\ExpressiveTest\PassMiddleware;
 
 trait SetupApplicationTrait
 {
-
     /**
      * @var ContainerInterface|\Laminas\ServiceManager\ServiceManager
      */
