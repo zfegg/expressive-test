@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Zfegg\ExpressiveTest;
+namespace ZfeggTest\ExpressiveTest;
 
 use Dflydev\FigCookies\SetCookie;
 use Dflydev\FigCookies\SetCookies;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 use Laminas\Diactoros\Response;
+use Zfegg\ExpressiveTest\TestResponse;
 
 class TestResponseTest extends TestCase
 {
-
     public function testAssertStatus()
     {
         (new TestResponse(new Response()))->assertStatus(200);

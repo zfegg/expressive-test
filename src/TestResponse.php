@@ -14,7 +14,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 class TestResponse
 {
-
     /**
      * The response to delegate to.
      *
