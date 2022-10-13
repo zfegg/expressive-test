@@ -5,7 +5,7 @@
         "php": ">=7.2",
         "phpunit/phpunit": "^6.0 | ^7.0 | ^8.0 | ^9.0",
         "mezzio/mezzio": "^3.0",
-        "laminas/laminas-diactoros": "^1.7 | ^2.0",
+        "laminas/laminas-diactoros": "^1.7 | ^2.11.1",
         "laminas/laminas-servicemanager": "^3.3",
         "dflydev/fig-cookies": "^2.0 | ^3.0"
     },
