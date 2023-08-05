@@ -370,7 +370,7 @@ trait MakeHttpRequestTrait
             $method,
             $uri,
             $parameters,
-            $server,
+            $server + $this->serverVariables,
             $content,
             $cookies + $this->defaultCookies,
             $files
