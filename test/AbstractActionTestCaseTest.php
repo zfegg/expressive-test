@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ZfeggTest\ExpressiveTest;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
@@ -27,17 +28,17 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
         $this->assertInstanceOf(ContainerInterface::class, $this->loadContainer());
     }
 
-    public function params()
+    public static function params()
     {
         $body = '{"a":"b"}';
 
         return [
             'BodyString' => [$body],
-            'BodyStreamInterface' => [$this->makeStream($body)],
+            'BodyStreamInterface' => [self::makeStream($body)],
         ];
     }
 
-    public function makeStream($body = '{"a":"b"}')
+    public static function makeStream($body = '{"a":"b"}')
     {
         $stream = new Stream('php://memory', 'r+');
         $stream->write($body);
@@ -46,10 +47,7 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
         return $stream;
     }
 
-    /**
-     *
-     * @dataProvider params
-     */
+    #[DataProvider('params')]
     public function testAction($body)
     {
         $app = $this->container->get(Application::class);
@@ -142,7 +140,7 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
         $this->assertEquals(['referer' => $referer], $this->defaultHeaders);
     }
 
-    public function methods()
+    public static function methods()
     {
         return [
             'options' => ['options'],
@@ -154,7 +152,7 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
         ];
     }
 
-    public function jsonMethods()
+    public static function jsonMethods()
     {
         return [
             'getJson' => ['getJson'],
@@ -164,9 +162,7 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
         ];
     }
 
-    /**
-     * @dataProvider methods
-     */
+    #[DataProvider('methods')]
     public function testMethods($method, ...$args)
     {
         /** @var Application $app */
@@ -184,9 +180,7 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
         $this->$method('/', ...$args)->assertOk();
     }
 
-    /**
-     * @dataProvider jsonMethods
-     */
+    #[DataProvider('jsonMethods')]
     public function testJsonMethods($callMethod, ...$args)
     {
         $method = strtoupper(str_replace('Json', '', $callMethod));
@@ -195,7 +189,7 @@ class AbstractActionTestCaseTest extends AbstractActionTestCase
         $app = $this->container->get(Application::class);
         $response = $this->prophesize(ResponseInterface::class);
         $response->getStatusCode()->willReturn(200)->shouldBeCalled();
-        $response->getBody()->willReturn($this->makeStream('{"a":123}'))->shouldBeCalled();
+        $response->getBody()->willReturn(self::makeStream('{"a":123}'))->shouldBeCalled();
 
         $app->route('/', function (ServerRequestInterface $request) use ($response, $args) {
             if (isset($args[1])) {

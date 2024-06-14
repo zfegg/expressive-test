@@ -7,6 +7,7 @@ namespace Zfegg\ExpressiveTest;
 use Laminas\Diactoros\ServerRequest;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\Diactoros\Stream;
+use Laminas\Diactoros\UriFactory;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 
@@ -69,17 +70,10 @@ class MockRequestFactory
 
         $_POST = $parsedBody;
 
-        if (function_exists('\Laminas\Diactoros\normalizeServer')) { // Diactoros v2.0
-            $server = normalizeServer($_SERVER);
-            $files   = normalizeUploadedFiles($files);
-            $headers = marshalHeadersFromSapi($_SERVER);
-            $uri = marshalUriFromSapi($_SERVER, $headers);
-        } else { // Diactoros v1.7
-            $server  = ServerRequestFactory::normalizeServer($_SERVER);
-            $files   = ServerRequestFactory::normalizeFiles($files);
-            $headers = ServerRequestFactory::marshalHeaders($server);
-            $uri = ServerRequestFactory::marshalUriFromServer($server, $headers);
-        }
+        $server = normalizeServer($_SERVER);
+        $files   = normalizeUploadedFiles($files);
+        $headers = marshalHeadersFromSapi($_SERVER);
+        $uri = UriFactory::createFromSapi($_SERVER, $headers);
 
         if ($body instanceof StreamInterface) {
             $stream = $body;
