@@ -16,7 +16,7 @@ $config = $aggregator->getMergedConfig();
 
 // Build container
 $container = new ServiceManager();
-(new Config($config['dependencies']))->configureServiceManager($container);
+$container->configure($config['dependencies']);
 
 // Inject config
 $container->setService('config', $config);
